@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <!-- 添加 marked.js 用于 Markdown 解析 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <!-- 添加 highlight.js 用于代码高亮 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            color: white;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main content */
+        .main-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 3rem 2rem;
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Introduction */
+        .intro-text {
+            font-size: 1.1rem;
+            color: #555;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Architecture */
+        .architecture-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            flex-wrap: wrap;
+        }
+
+        .arch-component {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            min-width: 200px;
+        }
+
+        .arch-component i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .arch-arrow {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .use-case {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .use-case h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .use-case p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-example {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #333;
+            border-left: 3px solid #28a745;
+        }
+
+        /* Code examples */
+        .code-section {
+            margin: 2rem 0;
+        }
+
+        .code-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+        }
+
+        .code-tab {
+            padding: 1rem 2rem;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .code-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .code-content {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        /* Benefits */
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-right: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .benefit-content h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Getting Started */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            line-height: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+            color: white;
+        }
+
+        /* Chat Bot Styles */
+        .chat-bot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-bot-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-bot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .chat-bot-button:active {
+            transform: scale(0.95);
+        }
+
+        .chat-bot-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .chat-bot-button:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chat-bot-popup {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 480px;           /* 从380px调整为480px，增加100px宽度 */
+            height: 580px;          /* 从500px调整为580px，稍微增加一点高度 */
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%) scale(0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-bot-popup.show {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #28a745;
+            color: white;
+        }
+
+        .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 75%;         /* 从70%调整为75%，利用更多宽度 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.typing .message-content {
+            background: #e9ecef;
+            padding: 16px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #999;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input-form {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 12px 18px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            resize: none;
+            min-height: 44px;
+            max-height: 100px;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-send {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-send:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-reply {
+            background: #e9ecef;
+            border: none;
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .quick-reply:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .architecture-diagram {
+                flex-direction: column;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+
+            .chat-bot-popup {
+                width: calc(100vw - 30px);    /* 减少边距，让手机端更宽敞 */
+                height: calc(100vh - 130px);   /* 优化手机端高度 */
+                bottom: 90px;
+                right: 15px;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .chat-bot-popup {
+                width: calc(100vw - 20px);    /* 小屏幕时进一步减少边距 */
+                height: calc(100vh - 110px);
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
+            }
+        }
+
+        /* 大屏幕时可以更宽敞 */
+        @media (min-width: 1400px) {
+            .chat-bot-popup {
+                width: 520px;              /* 大屏幕时可以更宽 */
+                height: 650px;             /* 大屏幕时可以更高 */
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Markdown 样式优化 */
+        .message-content h1,
+        .message-content h2,
+        .message-content h3,
+        .message-content h4,
+        .message-content h5,
+        .message-content h6 {
+            margin: 0.5em 0;
+            color: inherit;
+        }
+
+        .message-content h1 { font-size: 1.2em; }
+        .message-content h2 { font-size: 1.1em; }
+        .message-content h3 { font-size: 1.05em; }
+        .message-content h4 { font-size: 1em; }
+
+        .message-content p {
+            margin: 0.5em 0;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+        }
+
+        .message-content li {
+            margin: 0.2em 0;
+        }
+
+        .message-content code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message.user .message-content code {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .message-content pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 8px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            position: relative;
+        }
+
+        .message.user .message-content pre {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .message-content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            color: inherit;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+        }
+
+        .message-content em {
+            font-style: italic;
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+            margin: 8px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* 复制按钮样式 */
+        .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            color: #667eea;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .message.bot .message-content:hover .copy-button {
+            display: block;
+        }
+
+        .copy-button:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
+        }
+
+        .copy-button.copied {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: rgba(40, 167, 69, 0.3);
+            color: #28a745;
+        }
+
+        .copy-button i {
+            margin-right: 4px;
+        }
+
+        /* 代码块复制按钮 */
+        .code-copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy-button:hover {
+            background: white;
+            color: #333;
+            transform: scale(1.05);
+        }
+
+        .code-copy-button.copied {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        /* Toast 通知 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- 保持其余HTML内容不变 -->
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-network-wired"></i> Model Context Protocol</h1>
+            <p>连接AI助手与外部世界的标准化协议 - 让AI更智能、更强大、更实用</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Introduction Section -->
+            <div class="section">
+                <h2><i class="fas fa-info-circle"></i> 什么是 MCP？</h2>
+                <div class="intro-text">
+                    <p>Model Context Protocol (MCP) 是一个开放标准，旨在为AI应用程序提供安全、可控的方式来访问外部数据源和工具。它就像是AI助手的"神经系统"，让AI能够感知和操作真实世界的数据和服务。</p>
+                    <br>
+                    <p>通过MCP，AI助手不再局限于训练数据，而是可以实时访问数据库、文件系统、API接口等各种资源，从而提供更准确、更及时的服务。</p>
+                </div>
+            </div>
+
+            <!-- Architecture Section -->
+            <div class="section">
+                <h2><i class="fas fa-sitemap"></i> 系统架构</h2>
+                <div class="architecture-diagram">
+                    <div class="arch-component">
+                        <i class="fas fa-robot"></i>
+                        <h3>{{ architecture.client }}</h3>
+                        <p>发起请求和处理响应</p>
+                    </div>
+                    <div class="arch-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="arch-component">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>{{ architecture.protocol }}</h3>
+                        <p>标准化通信协议</p>
+                    </div>
+                    <div class="arch-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="arch-component">
+                        <i class="fas fa-server"></i>
+                        <h3>{{ architecture.server }}</h3>
+                        <p>处理请求和资源管理</p>
+                    </div>
+                    <div class="arch-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="arch-component">
+                        <i class="fas fa-database"></i>
+                        <h3>{{ architecture.resources }}</h3>
+                        <p>实际的数据和服务</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="section">
+                <h2><i class="fas fa-star"></i> 核心特性</h2>
+                <div class="features-grid">
+                    {% for feature in features %}
+                    <div class="feature-card">
+                        <div class="feature-icon">{{ feature.icon }}</div>
+                        <h3>{{ feature.title }}</h3>
+                        <p>{{ feature.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Use Cases Section -->
+            <div class="section">
+                <h2><i class="fas fa-lightbulb"></i> 应用场景</h2>
+                <div class="use-cases">
+                    {% for use_case in use_cases %}
+                    <div class="use-case">
+                        <h3>{{ use_case.title }}</h3>
+                        <p>{{ use_case.description }}</p>
+                        <div class="use-case-example">
+                            <strong>示例：</strong> {{ use_case.example }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Code Examples Section -->
+            <div class="section">
+                <h2><i class="fas fa-code"></i> 代码示例</h2>
+                <div class="code-section">
+                    <div class="code-tabs">
+                        <button class="code-tab active" onclick="showCode('server')">MCP服务器</button>
+                        <button class="code-tab" onclick="showCode('client')">客户端调用</button>
+                        <button class="code-tab" onclick="showCode('config')">配置文件</button>
+                    </div>
+
+                    <div id="server-code" class="code-content">
+                        <pre><code class="language-python"># MCP服务器示例
+from mcp import MCPServer, Tool, Resource
+import sqlite3
+import json
+
+class DatabaseMCPServer(MCPServer):
+    def __init__(self):
+        super().__init__("database-server", "1.0.0")
+        self.db_path = "example.db"
+
+    @Tool("query_database")
+    async def query_database(self, sql: str) -> dict:
+        """执行SQL查询并返回结果"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            columns = [desc[0] for desc in cursor.description]
+
+            return {
+                "success": True,
+                "data": [dict(zip(columns, row)) for row in results],
+                "count": len(results)
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e)
+            }
+        finally:
+            conn.close()
+
+    @Resource("user_data")
+    async def get_user_data(self) -> str:
+        """获取用户数据资源"""
+        return await self.query_database("SELECT * FROM users LIMIT 100")
+
+if __name__ == "__main__":
+    server = DatabaseMCPServer()
+    server.run()
+</code></pre>
+                    </div>
+
+                    <div id="client-code" class="code-content" style="display: none;">
+                        <pre><code class="language-python"># 客户端调用示例
+import asyncio
+from mcp_client import MCPClient
+
+async def main():
+    # 连接到MCP服务器
+    client = MCPClient("ws://localhost:8000")
+    await client.connect()
+
+    try:
+        # 调用数据库查询工具
+        result = await client.call_tool("query_database", {
+            "sql": "SELECT name, email FROM users WHERE active = 1"
+        })
+
+        if result["success"]:
+            print(f"查询成功，返回 {result['count']} 条记录:")
+            for row in result["data"]:
+                print(f"- {row['name']}: {row['email']}")
+        else:
+            print(f"查询失败: {result['error']}")
+
+        # 获取资源
+        user_data = await client.get_resource("user_data")
+        print(f"用户数据: {user_data}")
+
+    finally:
+        await client.disconnect()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+</code></pre>
+                    </div>
+
+                    <div id="config-code" class="code-content" style="display: none;">
+                        <pre><code class="language-json">{
+  "name": "database-mcp-server",
+  "version": "1.0.0",
+  "description": "数据库访问MCP服务器",
+  "main": "server.py",
+  "mcpServers": {
+    "database": {
+      "command": "python",
+      "args": ["server.py"],
+      "env": {
+        "DATABASE_URL": "sqlite:///example.db"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "query_database",
+      "description": "执行SQL查询",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string",
+            "description": "要执行的SQL查询语句"
+          }
+        },
+        "required": ["sql"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "user_data",
+      "description": "用户数据资源",
+      "mimeType": "application/json"
+    }
+  ],
+  "security": {
+    "authentication": "api_key",
+    "permissions": ["read", "write"],
+    "rateLimit": {
+      "requests": 100,
+      "window": "1h"
+    }
+  }
+}
+</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="section">
+                <h2><i class="fas fa-trophy"></i> 主要优势</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="benefit-content">
+                            <h4>安全可控</h4>
+                            <p>提供细粒度的权限控制和安全机制，确保数据访问的安全性</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-puzzle-piece"></i></div>
+                        <div class="benefit-content">
+                            <h4>标准化接口</h4>
+                            <p>统一的协议标准，简化不同系统之间的集成复杂度</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                        <div class="benefit-content">
+                            <h4>高度可扩展</h4>
+                            <p>模块化设计，支持自定义工具和资源，满足各种业务需求</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-rocket"></i></div>
+                        <div class="benefit-content">
+                            <h4>高性能</h4>
+                            <p>异步处理和连接池技术，支持高并发访问</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-tools"></i></div>
+                        <div class="benefit-content">
+                            <h4>易于开发</h4>
+                            <p>提供丰富的SDK和工具，简化开发流程</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-globe"></i></div>
+                        <div class="benefit-content">
+                            <h4>跨平台</h4>
+                            <p>支持多种编程语言和平台，具有良好的兼容性</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Getting Started Section -->
+            <div class="section">
+                <h2><i class="fas fa-play-circle"></i> 快速开始</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>安装依赖</h3>
+                        <p>安装MCP SDK和相关依赖包，支持Python、JavaScript、Go等多种语言</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>创建服务器</h3>
+                        <p>继承MCPServer类，定义你的工具和资源，实现具体的业务逻辑</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>配置连接</h3>
+                        <p>设置服务器配置，包括端口、认证、权限等安全相关设置</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>集成应用</h3>
+                        <p>在AI应用中集成MCP客户端，开始享受强大的外部资源访问能力</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Details Section -->
+            <div class="section">
+                <h2><i class="fas fa-cogs"></i> 技术细节</h2>
+                <div class="intro-text">
+                    <h3>协议特性</h3>
+                    <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
+                        <li><strong>传输层：</strong>支持WebSocket、HTTP/2、gRPC等多种传输协议</li>
+                        <li><strong>序列化：</strong>使用JSON-RPC 2.0作为消息格式，支持二进制数据传输</li>
+                        <li><strong>认证：</strong>支持API Key、OAuth 2.0、JWT等多种认证方式</li>
+                        <li><strong>错误处理：</strong>标准化的错误码和错误信息格式</li>
+                        <li><strong>版本控制：</strong>向后兼容的版本管理机制</li>
+                    </ul>
+
+                    <h3 style="margin-top: 2rem;">性能优化</h3>
+                    <ul style="text-align: left; max-width: 800px; margin: 1rem auto;">
+                        <li><strong>连接复用：</strong>支持连接池和长连接，减少连接开销</li>
+                        <li><strong>批量操作：</strong>支持批量请求处理，提高处理效率</li>
+                        <li><strong>缓存机制：</strong>智能缓存常用数据，减少重复请求</li>
+                        <li><strong>流式处理：</strong>支持大数据量的流式传输</li>
+                        <li><strong>负载均衡：</strong>支持多实例部署和负载均衡</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Community Section -->
+            <div class="section">
+                <h2><i class="fas fa-users"></i> 社区生态</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3>官方文档</h3>
+                        <p>完整的API文档、教程和最佳实践指南</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛠️</div>
+                        <h3>工具库</h3>
+                        <p>丰富的预构建工具和连接器，覆盖常见使用场景</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>社区支持</h3>
+                        <p>活跃的开发者社区，及时的技术支持和问题解答</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>示例项目</h3>
+                        <p>各种实际应用场景的示例代码和项目模板</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2024 Model Context Protocol 介绍网站 | 基于 Django 1.11 & Python 2.7 构建</p>
+            <p>让AI更智能，让连接更简单 🚀</p>
+        </div>
+    </div>
+
+    <!-- Chat Bot -->
+    <div class="chat-bot-container">
+        <button class="chat-bot-button" id="chatBotButton" onclick="toggleChatBot()">
+            <i class="fas fa-comments"></i>
+            <div class="notification-badge" id="notificationBadge" style="display: none;">1</div>
+        </button>
+
+        <div class="chat-bot-popup" id="chatBotPopup">
+            <div class="chat-header">
+                <h3>🤖 MCP 智能助手</h3>
+                <p>我来帮您了解 MCP 相关问题</p>
+                <button class="chat-close" onclick="toggleChatBot()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        👋 您好！我是 MCP 智能助手，很高兴为您服务！<br><br>
+                        我可以帮助您：<br>
+                        • 了解 MCP 的基本概念<br>
+                        • 解答技术实现问题<br>
+                        • 提供代码示例和最佳实践<br>
+                        • 协助解决集成问题<br><br>
+                        请随时向我提问！
+                    </div>
+                </div>
+                <div class="quick-replies">
+                    <button class="quick-reply" onclick="sendQuickReply('什么是MCP？')">什么是MCP？</button>
+                    <button class="quick-reply" onclick="sendQuickReply('如何开始使用MCP？')">如何开始使用？</button>
+                    <button class="quick-reply" onclick="sendQuickReply('MCP有哪些优势？')">MCP优势</button>
+                    <button class="quick-reply" onclick="sendQuickReply('代码示例')">代码示例</button>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <form class="chat-input-form" onsubmit="sendMessage(event)">
+                    <textarea
+                        class="chat-input"
+                        id="chatInput"
+                        placeholder="输入您的问题..."
+                        rows="1"
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                    <button type="submit" class="chat-send" id="chatSend">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+            <!-- Toast 通知 -->
+            <div id="toast" class="toast"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        // 聊天机器人相关变量
+        let chatBotOpen = false;
+        let conversationHistory = [];
+
+        // 在脚本开头配置 marked.js
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (err) {}
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            breaks: true,
+            gfm: true
+        });
+
+        // 显示/隐藏聊天机器人
+        function toggleChatBot() {
+            const popup = document.getElementById('chatBotPopup');
+            const badge = document.getElementById('notificationBadge');
+
+            chatBotOpen = !chatBotOpen;
+
+            if (chatBotOpen) {
+                popup.classList.add('show');
+                badge.style.display = 'none';
+                // 聚焦输入框
+                setTimeout(() => {
+                    document.getElementById('chatInput').focus();
+                }, 300);
+            } else {
+                popup.classList.remove('show');
+            }
+        }
+
+        // 发送消息
+        function sendMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            addMessage('user', message);
+            input.value = '';
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateMCPResponse(message);
+                addMessage('bot', response, true); // 改为 true，启用 markdown
+            }, 1000 + Math.random() * 2000);
+        }
+
+        // 快速回复
+        function sendQuickReply(message) {
+            document.getElementById('chatInput').value = message;
+            sendMessage({ preventDefault: () => {} });
+
+            // 隐藏快速回复按钮
+            document.querySelector('.quick-replies').style.display = 'none';
+        }
+
+        // 添加消息到聊天界面
+        function addMessage(type, content, isMarkdown = false) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = type === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+
+            if (isMarkdown && type === 'bot') {
+                // 解析 Markdown
+                const htmlContent = marked.parse(content);
+                messageContent.innerHTML = htmlContent;
+
+                // 添加复制按钮
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.innerHTML = '<i class="fas fa-copy"></i>复制';
+                copyButton.onclick = () => copyMessage(copyButton);
+                copyButton.title = '复制消息';
+                messageContent.appendChild(copyButton);
+
+                // 为代码块添加复制按钮
+                setTimeout(() => {
+                    addCodeCopyButtons(messageContent);
+                }, 100);
+            } else {
+                messageContent.innerHTML = content.replace(/\n/g, '<br>');
+
+                // 为机器人消息添加复制按钮
+                if (type === 'bot') {
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.innerHTML = '<i class="fas fa-copy"></i>复制';
+                    copyButton.onclick = () => copyMessage(copyButton);
+                    copyButton.title = '复制消息';
+                    messageContent.appendChild(copyButton);
+                }
+            }
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            messagesContainer.appendChild(messageDiv);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            conversationHistory.push({ type: type, content: content });
+        }
+
+        // 显示打字指示器
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing';
+            typingDiv.id = 'typingIndicator';
+
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 隐藏打字指示器
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function addCodeCopyButtons(container) {
+            const codeBlocks = container.querySelectorAll('pre');
+            codeBlocks.forEach((block) => {
+                const copyButton = document.createElement('button');
+                copyButton.className = 'code-copy-button';
+                copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                copyButton.onclick = () => copyCode(copyButton, block);
+                copyButton.title = '复制代码';
+
+                block.style.position = 'relative';
+                block.appendChild(copyButton);
+            });
+        }
+
+        function copyMessage(button) {
+            const messageContent = button.parentElement;
+            const copyButton = messageContent.querySelector('.copy-button');
+
+            // 获取文本内容（去除复制按钮）
+            const tempDiv = messageContent.cloneNode(true);
+            const tempCopyButton = tempDiv.querySelector('.copy-button');
+            if (tempCopyButton) {
+                tempCopyButton.remove();
+            }
+
+            const text = tempDiv.innerText || tempDiv.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fas fa-check"></i>已复制';
+                copyButton.classList.add('copied');
+
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.classList.remove('copied');
+                }, 2000);
+
+                showToast('消息已复制到剪贴板', 'success');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                showToast('复制失败，请手动选择文本复制', 'error');
+            });
+        }
+
+        function copyCode(button, codeBlock) {
+            const code = codeBlock.querySelector('code');
+            const text = code ? code.innerText : codeBlock.innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+
+                showToast('代码已复制到剪贴板', 'success');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                showToast('复制失败', 'error');
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 生成MCP相关响应（模拟AI回答）
+        function generateMCPResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+
+            // 简单的关键词匹配响应系统
+            if (message.includes('什么是') || message.includes('mcp是') || message.includes('介绍')) {
+                return `🤖 **Model Context Protocol (MCP)** 是一个开放标准，专门为AI应用程序设计，让它们能够安全、可控地访问外部数据源和工具。
+
+**核心价值：**
+• 🔗 **标准化连接**：统一AI与外部系统的通信方式
+• 🛡️ **安全可控**：提供细粒度的权限管理
+• 🚀 **实时数据**：让AI获取最新的动态信息
+• 🧩 **模块化设计**：易于扩展和集成
+
+想了解更多具体方面吗？比如架构设计、应用场景或代码实现？`;
+            }
+
+            if (message.includes('如何') || message.includes('开始') || message.includes('使用')) {
+                return `🚀 **快速开始使用 MCP：**
+
+**第一步：环境准备**
+\`\`\`bash
+pip install mcp-sdk
+\`\`\`
+
+**第二步：创建MCP服务器**
+\`\`\`python
+from mcp import MCPServer
+
+class MyMCPServer(MCPServer):
+    def __init__(self):
+        super().__init__("my-server", "1.0.0")
+\`\`\`
+
+**第三步：定义工具和资源**
+• 使用 @Tool 装饰器定义功能
+• 使用 @Resource 装饰器定义资源
+
+**第四步：启动和连接**
+• 运行服务器
+• 客户端连接并调用
+
+需要看完整的代码示例吗？或者有特定的集成场景？`;
+            }
+
+            if (message.includes('优势') || message.includes('好处') || message.includes('特点')) {
+                return `✨ **MCP 的主要优势：**
+
+🔒 **安全性**
+• 细粒度权限控制
+• 加密通信
+• 身份验证机制
+
+⚡ **性能**
+• 异步处理
+• 连接池技术
+• 批量操作支持
+
+🔧 **易用性**
+• 标准化API
+• 丰富的SDK
+• 详细文档
+
+🌐 **兼容性**
+• 多语言支持
+• 跨平台部署
+• 向后兼容
+
+🎯 **实用性**
+• 实时数据访问
+• 工具集成
+• 资源管理
+
+相比传统方案，MCP减少了70%的集成复杂度！`;
+            }
+
+            if (message.includes('代码') || message.includes('示例') || message.includes('例子')) {
+                return `💻 **MCP 代码示例：**
+
+**数据库查询工具：**
+\`\`\`python
+@Tool("query_db")
+async def query_database(self, sql: str):
+    # 执行数据库查询
+    results = execute_sql(sql)
+    return {"data": results, "count": len(results)}
+\`\`\`
+
+**文件操作资源：**
+\`\`\`python
+@Resource("config_file")
+async def get_config(self):
+    with open("config.json", "r") as f:
+        return f.read()
+\`\`\`
+
+**客户端调用：**
+\`\`\`python
+result = await client.call_tool("query_db", {
+    "sql": "SELECT * FROM users"
+})
+\`\`\`
+
+需要看特定场景的完整实现吗？比如API集成、文件处理或监控系统？`;
+            }
+
+            if (message.includes('架构') || message.includes('结构') || message.includes('原理')) {
+                return `🏗️ **MCP 系统架构：**
+
+**四层结构：**
+1. **客户端层** (AI应用)
+   • 发起请求
+   • 处理响应
+   • 用户交互
+
+2. **协议层** (MCP Protocol)
+   • JSON-RPC 2.0
+   • WebSocket/HTTP
+   • 消息路由
+
+3. **服务器层** (MCP Server)
+   • 请求处理
+   • 权限控制
+   • 资源管理
+
+4. **资源层** (External Resources)
+   • 数据库
+   • API接口
+   • 文件系统
+
+**通信流程：**
+客户端 → 协议层 → 服务器 → 资源 → 响应返回
+
+这种分层设计确保了系统的可扩展性和安全性！`;
+            }
+
+            if (message.includes('应用') || message.includes('场景') || message.includes('用途')) {
+                return `🎯 **MCP 应用场景：**
+
+**企业级应用：**
+• 📊 **商业智能**：实时数据分析和报表生成
+• 🔍 **知识管理**：企业文档检索和问答
+• 📈 **监控告警**：系统状态监控和异常处理
+
+**开发者工具：**
+• 🛠️ **代码助手**：代码分析和自动化工具
+• 📚 **文档生成**：API文档和技术文档
+• 🧪 **测试自动化**：测试用例生成和执行
+
+**日常办公：**
+• 📧 **邮件处理**：智能邮件分类和回复
+• 📅 **日程管理**：会议安排和提醒
+• 📋 **任务跟踪**：项目进度和任务分配
+
+**数据处理：**
+• 🗄️ **数据库操作**：复杂查询和数据分析
+• 📁 **文件管理**：批量处理和格式转换
+• 🌐 **API集成**：第三方服务调用
+
+您有特定的应用需求吗？`;
+            }
+
+            if (message.includes('安全') || message.includes('权限') || message.includes('保护')) {
+                return `🛡️ **MCP 安全机制：**
+
+**身份认证：**
+• 🔐 API Key 认证
+• 🎫 OAuth 2.0 集成
+• 🔑 JWT Token 验证
+• 📋 多因素认证
+
+**权限控制：**
+• 👤 用户级权限
+• 🔧 功能级权限
+• 📊 数据级权限
+• ⏰ 时间限制
+
+**数据保护：**
+• 🔒 传输加密 (TLS/SSL)
+• 🗃️ 数据脱敏
+• 📝 审计日志
+• 🚫 访问限制
+
+**监控告警：**
+• 📊 实时监控
+• ⚠️ 异常检测
+• 📧 安全告警
+• 🔍 行为分析
+
+**最佳实践：**
+• 最小权限原则
+• 定期权限审查
+• 安全配置检查
+• 应急响应计划
+
+安全是MCP的核心设计理念之一！`;
+            }
+
+            // 默认响应
+            const defaultResponses = [
+                `🤔 这是一个很好的问题！关于 "${userMessage}"，我需要更多上下文来给出准确的答案。
+
+您可以：
+• 🔍 查看页面上的详细介绍
+• 💬 询问更具体的问题
+• 📚 访问官方文档
+• 🛠️ 查看代码示例
+
+或者您可以问我：
+• MCP的基本概念
+• 技术实现细节
+• 应用场景案例
+• 安全机制说明`,
+
+                `💡 感谢您的提问！我理解您想了解 "${userMessage}" 相关的信息。
+
+**我可以帮您：**
+• 📖 解释MCP的核心概念
+• 🔧 提供技术实现指导
+• 💼 分享实际应用案例
+• 🚀 协助快速上手
+
+**建议您：**
+• 浏览页面上的详细内容
+• 查看代码示例部分
+• 了解系统架构设计
+• 探索应用场景介绍
+
+有什么具体想了解的吗？`,
+
+                `🌟 很高兴您对MCP感兴趣！关于 "${userMessage}"，让我为您提供一些相关信息。
+
+**MCP相关资源：**
+• 📋 完整功能介绍
+• 🏗️ 系统架构说明
+• 💻 代码示例展示
+• 🎯 应用场景分享
+
+**推荐阅读顺序：**
+1. 了解MCP基本概念
+2. 查看系统架构图
+3. 学习代码示例
+4. 探索应用场景
+
+需要我详细解释某个方面吗？`
+            ];
+
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // 处理输入框键盘事件
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(event);
+            }
+        }
+
+        // 代码高亮切换
+        function showCode(type) {
+            // 隐藏所有代码块
+            document.querySelectorAll('.code-content').forEach(function(el) {
+                el.style.display = 'none';
+            });
+
+            // 移除所有active类
+            document.querySelectorAll('.code-tab').forEach(function(el) {
+                el.classList.remove('active');
+            });
+
+            // 显示选中的代码块
+            document.getElementById(type + '-code').style.display = 'block';
+
+            // 添加active类到选中的标签
+            event.target.classList.add('active');
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 显示通知徽章
+            setTimeout(() => {
+                document.getElementById('notificationBadge').style.display = 'flex';
+            }, 3000);
+
+            // 添加滚动动画
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.section').forEach(function(section) {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(section);
+            });
+
+            // 特性卡片悬停效果增强
+            document.querySelectorAll('.feature-card').forEach(function(card) {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // 聊天输入框自动调整高度
+            const chatInput = document.getElementById('chatInput');
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            });
+        });
+
+        // 点击外部关闭聊天框
+        document.addEventListener('click', function(event) {
+            const chatContainer = document.querySelector('.chat-bot-container');
+            const popup = document.getElementById('chatBotPopup');
+
+            if (chatBotOpen && !chatContainer.contains(event.target)) {
+                popup.classList.remove('show');
+                chatBotOpen = false;
+            }
+        });
+    </script>
+</body>
+</html>
