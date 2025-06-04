@@ -1346,16 +1346,47 @@ if __name__ == "__main__":
 
             showTypingIndicator();
 
-            setTimeout(() => {
+            // 🔧 修复：直接在这里处理异步调用
+            fetch('/mcp_website/chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status); // 添加调试日志
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data); // 添加调试日志
                 hideTypingIndicator();
-                const response = generateMCPResponse(message);
-                addMessage('bot', response, true); // 改为 true，启用 markdown
-            }, 1000 + Math.random() * 2000);
+
+                if (data.success) {
+                    // 使用后端返回的响应
+                    addMessage('bot', data.response, true);
+                } else {
+                    // 降级到静态响应
+                    const fallbackResponse = generateStaticResponse(message);
+                    addMessage('bot', fallbackResponse, true);
+                }
+            })
+            .catch(error => {
+                console.error('API call failed:', error);
+                hideTypingIndicator();
+                // 降级到静态响应
+                const fallbackResponse = generateStaticResponse(message);
+                addMessage('bot', fallbackResponse, true);
+            });
         }
 
         // 快速回复
         function sendQuickReply(message) {
             document.getElementById('chatInput').value = message;
+
+            // 直接调用修改后的 sendMessage
             sendMessage({ preventDefault: () => {} });
 
             // 隐藏快速回复按钮
@@ -1523,7 +1554,7 @@ if __name__ == "__main__":
         }
 
         // 生成MCP相关响应（模拟AI回答）
-        function generateMCPResponse(userMessage) {
+        function generateStaticResponse(userMessage) {
             const message = userMessage.toLowerCase();
 
             // 简单的关键词匹配响应系统

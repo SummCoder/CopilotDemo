@@ -2,6 +2,11 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+import json
+from .mcp_utils import mcp_bot
 
 
 def index(request):
@@ -60,3 +65,27 @@ def index(request):
         }
     }
     return render(request, 'mcp_intro/index.html', context)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def chat(request):
+    """聊天 API 接口."""
+    try:
+        data = json.loads(request.body)
+        user_message = data.get('message', '')
+
+        if not user_message:
+            return JsonResponse({'error': 'No message provided'}, status=400)
+
+        # 获取 MCP 响应
+        bot_response = mcp_bot.get_response(user_message)
+
+        return JsonResponse({
+            'success': True,
+            'response': bot_response,
+            'is_markdown': True
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
